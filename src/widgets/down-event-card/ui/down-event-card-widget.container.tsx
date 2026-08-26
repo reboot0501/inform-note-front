@@ -38,7 +38,9 @@ export const DownEventCard: React.FC<DownEventCardProps> = ({
   // 가상 스크롤에 의해 DOM에 마운트된 각 카드 단위로 findActionPopupApi 병렬 비동기 호출 & L2 캐싱
   const { data: actionDetail, isLoading: isLoadingDetail } = useActionPopupQuery(
     data.downEventId,
-    enableDetailFetch
+    enableDetailFetch,
+    rowNumber,
+    totalRows
   );
 
   // 메타데이터와 단건 API 조회 결과 merge

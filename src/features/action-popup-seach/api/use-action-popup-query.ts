@@ -11,12 +11,25 @@ export const actionPopupQueryKeys = {
 /**
  * downEventId 기준으로 현상 및 조치 상세 HTML 본문 병렬 비동기 조회 및 L2 캐싱
  */
-export function useActionPopupQuery(downEventId?: string, enabled: boolean = true) {
+export function useActionPopupQuery(
+  downEventId?: string,
+  enabled: boolean = true,
+  rowNumber?: number,
+  totalRows?: number
+) {
   return useQuery<ActionPopupResponse>({
     queryKey: actionPopupQueryKeys.detail(downEventId),
     queryFn: async () => {
       if (!downEventId) {
         throw new Error('downEventId가 필요합니다.');
+      }
+      if (typeof window !== 'undefined') {
+        const rowText = rowNumber
+          ? totalRows
+            ? `(Row: #${rowNumber} / ${totalRows})`
+            : `(Row: #${rowNumber})`
+          : '';
+        window.alert(`신규 데이터 api 요청 : ${downEventId} ${rowText}`.trim());
       }
       return await findActionPopupApi({ downEventId });
     },
