@@ -14,6 +14,9 @@ import { Badge } from '@/shared/ui/badge';
 import { Input } from '@/shared/ui/input';
 import { openImageViewerWindow } from '@/shared/lib/image-viewer-popup';
 
+import 'froala-editor/css/froala_style.min.css';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+
 export interface DownEventDetailData {
   // 현상 서술 (Symptom)
   symptomName?: string;

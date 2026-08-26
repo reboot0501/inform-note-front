@@ -147,10 +147,79 @@
   word-break: break-word;
 }
 
+.fr-view::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .fr-view table {
   border-collapse: collapse;
+  max-width: 100%;
+  margin: 0.75rem 0;
+  box-sizing: border-box;
+}
+
+.fr-view table:not([style*="width"]) {
+  width: 100%;
+}
+
+/* 1. Froala 테이블 2개가 양옆으로 나란히 배치되는 컨테이너 (Flex Grid) */
+.fr-view .table-side-by-side,
+.fr-view .table-grid-2,
+.fr-view .table-lr-container,
+.fr-view .rpt-table-group {
+  display: flex;
+  gap: 1rem;
   width: 100%;
   margin: 0.75rem 0;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.fr-view .table-side-by-side > table,
+.fr-view .table-grid-2 > table,
+.fr-view .table-lr-container > table,
+.fr-view .rpt-table-group > table {
+  flex: 1 1 calc(50% - 0.5rem);
+  width: calc(50% - 0.5rem);
+  min-width: 260px;
+  margin: 0;
+}
+
+/* 2. Froala Float 기반 좌우 테이블 정렬 클래스 및 인라인 스타일 */
+.fr-view table.fr-table-align-left,
+.fr-view table.table-left,
+.fr-view table[align="left"],
+.fr-view table.fr-inline-left,
+.fr-view table[style*="float: left"],
+.fr-view table[style*="float:left"] {
+  float: left;
+  width: calc(50% - 0.5rem) !important;
+  margin-right: 1rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.fr-view table.fr-table-align-right,
+.fr-view table.table-right,
+.fr-view table[align="right"],
+.fr-view table.fr-inline-right,
+.fr-view table[style*="float: right"],
+.fr-view table[style*="float:right"] {
+  float: right;
+  width: calc(50% - 0.5rem) !important;
+  margin-left: 0 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* 3. Inline-Table 기반 좌우 배치 */
+.fr-view table[style*="display: inline-table"],
+.fr-view table.inline-table,
+.fr-view table.table-inline {
+  display: inline-table !important;
+  vertical-align: top;
+  width: calc(50% - 0.5rem) !important;
+  margin-right: 0.5rem;
 }
 
 .fr-view table td,

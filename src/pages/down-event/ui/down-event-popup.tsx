@@ -198,6 +198,48 @@ const registerFroalaCommands = () => {
       }
     },
   });
+
+  // 셀 가로(수평) 분할
+  Editor.DefineIcon('splitCellHorizontal', { NAME: 'split-h', SVG_KEY: 'tableSplitCellHorizontally' });
+  Editor.RegisterCommand('splitCellHorizontal', {
+    title: '셀 가로(수평) 분할',
+    focus: true,
+    undo: true,
+    refreshAfterCallback: true,
+    callback: function (this: any) {
+      if (this.table && typeof this.table.splitCellHorizontally === 'function') {
+        this.table.splitCellHorizontally();
+      }
+    },
+  });
+
+  // 셀 세로(수직) 분할
+  Editor.DefineIcon('splitCellVertical', { NAME: 'split-v', SVG_KEY: 'tableSplitCellVertically' });
+  Editor.RegisterCommand('splitCellVertical', {
+    title: '셀 세로(수직) 분할',
+    focus: true,
+    undo: true,
+    refreshAfterCallback: true,
+    callback: function (this: any) {
+      if (this.table && typeof this.table.splitCellVertically === 'function') {
+        this.table.splitCellVertically();
+      }
+    },
+  });
+
+  // 셀 병합
+  Editor.DefineIcon('mergeCells', { NAME: 'merge-cells', SVG_KEY: 'tableCells' });
+  Editor.RegisterCommand('mergeCells', {
+    title: '셀 병합',
+    focus: true,
+    undo: true,
+    refreshAfterCallback: true,
+    callback: function (this: any) {
+      if (this.table && typeof this.table.mergeCells === 'function') {
+        this.table.mergeCells();
+      }
+    },
+  });
 };
 
 // 모듈 로드 시 커맨드 즉시 등록
@@ -299,9 +341,25 @@ export function DownEventPopup({
           toolbarButtons: [
             'bold', 'italic', 'underline', 'strikeThrough', 'textColor', 'backgroundColor', '|',
             'alignLeft', 'alignCenter', 'alignRight', 'formatOL', 'formatUL', '|',
-            'insertTemplateLR', 'insertTemplateTB', 'insertTable', 'tableCellBackground', '|',
-            'insertImage', 'clearContent', 'undo', 'redo', 'html'
+            'insertTemplateLR', 'insertTemplateTB', '|',
+            'insertTable', 'tableRows', 'tableColumns', 'mergeCells', 'splitCellHorizontal', 'splitCellVertical', 'tableCellBackground', 'tableCellStyle', 'tableRemove', '|',
+            'specialCharacters', 'insertImage', '|',
+            'clearContent', 'undo', 'redo', 'html'
           ],
+          tableEditButtons: [
+            'tableHeader', 'tableRemove', '|',
+            'tableRows', 'tableColumns', 'tableStyle', '-',
+            'tableCells', 'mergeCells', 'splitCellHorizontal', 'splitCellVertical', '|',
+            'tableCellBackground', 'tableCellVerticalAlign', 'tableCellStyle'
+          ],
+          tableCellStyles: {
+            'fr-highlighted': '하이라이트',
+            'fr-thick': '굵은 테두리',
+          },
+          tableStyles: {
+            'fr-dashed-borders': '점선 테두리',
+            'fr-alternate-rows': '교차 행 배경색',
+          },
           events: {
             initialized: function () {
               const html = initialHtmlRef.current || '';
