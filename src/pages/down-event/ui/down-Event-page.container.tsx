@@ -60,7 +60,7 @@ export function DownEventPage() {
   const rowVirtualizer = useVirtualizer({
     count: events.length,
     getScrollElement: () => scrollContainerRef.current,
-    estimateSize: () => 480, // 카드 예상 높이 (px)
+    estimateSize: () => 480, // 카드 예상 높이 (px), 가장 일반적인 모니터(1920×1080 해상도) 기준초기 추정치(Estimate)
     overscan: 2, // 상하 2건씩 버퍼 유지 (다운/업 스크롤 시 부드러운 병렬 프리패치)
   });
 
