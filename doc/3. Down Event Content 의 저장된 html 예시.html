@@ -1,0 +1,257 @@
+<div class="report-columns">
+  <div class="report-panel report-panel--left">
+    <table
+      class="rpt-table rpt-lr-table"
+      style="
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #e2e8f0;
+        margin: 10px 0;
+        border-radius: 8px;
+        overflow: hidden;
+      "
+    >
+      <tbody>
+        <tr>
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              border-right: 1px solid #e2e8f0;
+              padding: 14px;
+              background-color: #fffbeb;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-weight: bold;
+                color: #b45309;
+                margin-bottom: 8px;
+              "
+            >
+              <span>⚠️</span>
+              <h4 style="margin: 0; font-size: 13px;">발생 현상 (Symptom)</h4>
+            </div>
+
+            <p style="margin: 4px 0; font-size: 12px; color: #334155;">
+              현상에 대한 상세 수치 및 알람 내용을 입력하세요.
+            </p>
+            <br />
+          </td>
+
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              padding: 14px;
+              background-color: #eff6ff;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-weight: bold;
+                color: #1d4ed8;
+                margin-bottom: 8px;
+              "
+            >
+              <span>✔</span>
+              <h4 style="margin: 0; font-size: 13px;">
+                조치 내용 (Action Taken)
+              </h4>
+            </div>
+
+            <p style="margin: 4px 0; font-size: 12px; color: #334155;">
+              교체된 부품 및 파라미터 최적화 조치 내역을 입력하세요.
+            </p>
+            <br />
+          </td>
+        </tr>
+
+        <tr>
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              border-right: 1px solid #e2e8f0;
+              padding: 14px;
+              background-color: #fffbeb;
+            "
+          >
+            발생 현상 :&nbsp;
+          </td>
+
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              padding: 14px;
+              background-color: #eff6ff;
+            "
+          >
+            진행 상테 :
+          </td>
+        </tr>
+
+        <tr>
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              border-right: 1px solid #e2e8f0;
+              padding: 14px;
+              background-color: #fffbeb;
+            "
+          >
+            에러 코드 :
+          </td>
+
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              padding: 14px;
+              background-color: #eff6ff;
+            "
+          >
+            교체 부품 :
+          </td>
+        </tr>
+
+        <tr>
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              border-right: 1px solid #e2e8f0;
+              padding: 14px;
+              background-color: #fffbeb;
+            "
+          >
+            공정 영향:ㅈㅣㄴ행&nbsp;
+          </td>
+
+          <td
+            style="
+              width: 50%;
+              vertical-align: top;
+              padding: 14px;
+              background-color: #eff6ff;
+            "
+          >
+            <br />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><br /></p>
+
+    <div class="rpt-header rpt-header--warn">
+      <span class="rpt-icon rpt-icon--warn">⚠</span>
+      <h4>현상 서술</h4>
+      <span class="rpt-badge rpt-badge--warn">Symptom</span>
+    </div>
+
+    <div class="rpt-body">
+      <table class="rpt-kv-table">
+        <tbody>
+          <tr>
+            <th>발생 현상</th>
+            <td>Dry Vacuum Pump Overload</td>
+          </tr>
+
+          <tr>
+            <th>에러 코드</th>
+            <td>VAC-PMP-801 (ALARM-10848012)</td>
+          </tr>
+
+          <tr>
+            <th>공정 영향</th>
+            <td>PHOTO 라인 웨이퍼 처리 일시 정지</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rpt-sub-title rpt-sub-title--warn">
+        ▸ 원인 분석
+      </div>
+
+      <ul class="rpt-list">
+        <li>
+          PHOTO ASML_NXT_1980DI 설비 내부 점검 결과 파라미터 변동 감지
+        </li>
+        <li>
+          주기적 가동 누적 피로도 및 부품 노후화 영향 추정
+        </li>
+      </ul>
+
+      <div class="rpt-note rpt-note--info">
+        설비 자동 알람(ALARM-10848012) 감지 및 인터록 정상 동작 확인
+      </div>
+
+      <div class="rpt-img-placeholder">
+        <img
+          src="/feature/file-handler/view/0696fe38-a6d0-46ea-a0b3-7684d508a0c8"
+          data-file-id="0696fe38-a6d0-46ea-a0b3-7684d508a0c8"
+          data-name="rainbow_umbrella.jpg"
+          alt="rainbow_umbrella.jpg"
+          style="width: 280px;"
+          class="fr-fic fr-dib"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="report-panel report-panel--right">
+    <div class="rpt-header rpt-header--success">
+      <span class="rpt-icon rpt-icon--success">✔</span>
+      <h4>조치 내용</h4>
+      <span class="rpt-badge rpt-badge--success">Action</span>
+    </div>
+
+    <div class="rpt-body">
+      <table class="rpt-kv-table">
+        <tbody>
+          <tr>
+            <th>진행 상태</th>
+            <td>
+              <span class="rpt-tag--success">CLOSED</span>
+            </td>
+          </tr>
+
+          <tr>
+            <th>교체 부품</th>
+            <td>
+              Vacuum Pump Unit(VAC-PMP-801) - 1EA
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rpt-sub-title">
+        ▸ 후속 조치 및 계획
+      </div>
+
+      <ol class="rpt-ol">
+        <li>단품 점검 및 신호 정상화 확인 완료</li>
+        <li>파라미터 캘리브레이션 및 Dummy Wafer Run 테스트 수행</li>
+        <li>동일 챔버/라인 주기적 모니터링 강화</li>
+      </ol>
+
+      <div class="rpt-note rpt-note--warn">
+        재발 방지를 위한 정기 PM 점검 항목 등록 완료
+      </div>
+
+      <div class="rpt-img-placeholder">
+        <span class="rpt-img-icon">📷</span>
+        작업 후 설비 상태 확인 사진
+      </div>
+    </div>
+  </div>
+</div>
