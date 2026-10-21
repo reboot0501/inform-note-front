@@ -17,12 +17,12 @@ export default defineConfig(({ mode }) => {
       port: 7080,
       proxy: {
         '/feature': {
-          target: 'http://127.0.0.1:8080',
+          target: 'http://127.0.0.1:9093',
           changeOrigin: true,
           secure: false,
         },
         '/api': {
-          target: 'http://127.0.0.1:8080',
+          target: 'http://127.0.0.1:9093',
           changeOrigin: true,
           secure: false,
           rewrite: (requestPath) => requestPath.replace(/^\/api/, ''),

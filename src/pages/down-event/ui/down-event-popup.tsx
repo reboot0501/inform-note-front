@@ -18,6 +18,7 @@ import { findActionPopupApi } from '@/features/action-popup-seach';
 import { correctiveActionApi, type CorrectiveActionCommand } from '@/features/corrective-action-save';
 import { TechnicianSelectDrawer } from '@/features/technician-select';
 import { ReplacePartDrawer } from '@/features/replace-part';
+import { registerTempFileApi, getFileViewUrl } from '@/features/editor-file-upload';
 import type { DownEventCard } from '@/entities/down-event-card/model/down-event-card.entity';
 import type { WorkStatus } from '@/entities/down-event-card/model/vo/work-status.enum';
 import type { AssignedTechnician } from '@/entities/down-event-card/model/vo/assigned-technician.vo';
@@ -271,6 +272,19 @@ export function DownEventPopup({
   const froalaInstanceRef = useRef<any>(null);
   const initialHtmlRef = useRef<string>('');
 
+  // [이유] Froala 에디터 인스턴스 초기화 시 등록되는 이벤트 핸들러(image.beforeUpload) 클로저 내에서
+  // 오래된(Stale) 상태가 아닌 사용자가 선택한 최신 작업자/카드 상태를 참조하기 위해 Ref로 관리합니다.
+  const assignedTechnicianRef = useRef<AssignedTechnician | null>(assignedTechnician);
+  const itemRef = useRef<DownEventCard | null>(item);
+
+  useEffect(() => {
+    assignedTechnicianRef.current = assignedTechnician;
+  }, [assignedTechnician]);
+
+  useEffect(() => {
+    itemRef.current = item;
+  }, [item]);
+
   const {
     data: popupData,
     isLoading: isLoadingDetail,
@@ -372,6 +386,72 @@ export function DownEventPopup({
                 const current = instance.html.get();
                 setContentHtml(current);
               }
+            },
+
+            /**
+             * [이미지 파일 업로드 가로채기 핸들러 추가 이유]
+             * 
+             * 1. Froala 기본 데모 서버 업로드 차단:
+             *    - Froala 에디터는 업로드 핸들러가 없으면 자체 기본값인 'https://i.froala.com/upload'로 전송을 시도하며,
+             *      그 결과 데모용 샘플 이미지인 'https://i.froala.com/assets/photo1.jpg'가 본문에 박히는 문제가 발생합니다.
+             *    - 핸들러 끝에서 'return false;'를 반환하여 이 기본 데모 동작을 완벽히 차단합니다.
+             * 
+             * 2. 프로젝트 백엔드 파일 등록 API(/feature/file-handler/register-temp-file/command) 연동:
+             *    - 에디터에 드래그&드롭되거나 파일 선택기로 선택된 실제 이미지 파일을 우리 백엔드로 업로드하여
+             *      서버 물리 디스크 스토리지에 안전하게 저장합니다.
+             * 
+             * 3. 백엔드 필수 식별자(data-file-id, data-name) 및 인라인 뷰 URL(src) 주입:
+             *    - 백엔드가 발행한 UUID(fileId)를 기반으로 'data-file-id' 속성과 '/feature/file-handler/view/{fileId}'를
+             *      <img> 태그에 함께 주입하여 삽입합니다.
+             *    - 이렇게 해야 추후 본문 저장 시 백엔드의 FileHandlerUtils.extractFileKeysFromHtml()에서 파일 키를 정상 추출하여
+             *      영구 저장(FileStatus.SAVED) 처리를 성공적으로 수행할 수 있습니다.
+             */
+            'image.beforeUpload': function (this: any, images: any) {
+              if (!images || images.length === 0) {
+                return false;
+              }
+
+              const file = images[0];
+              const editor = this;
+
+              // 작업자 정보 획득 (Ref를 통해 최신 할당 정보 참조, 미선택 시 기본 시스템 정보 적용)
+              const currentTech: AssignedTechnician = assignedTechnicianRef.current || itemRef.current?.assignedTechnician || {
+                empNo: itemRef.current?.createdBy || 'SYSTEM',
+                name: itemRef.current?.createdBy || 'SYSTEM',
+                jobTitle: '엔지니어',
+                shift: 'A',
+              };
+
+              // 백엔드 임시 첨부파일 등록 API 호출
+              registerTempFileApi({
+                file,
+                refType: 'DOWN_ATTACHMENT',
+                assignedTechnician: currentTech,
+                refId: itemRef.current?.downEventId,
+              })
+                .then((res) => {
+                  // 백엔드 파일 인라인 조회 URL 생성 (/feature/file-handler/view/{fileId})
+                  const viewUrl = getFileViewUrl(res.fileId);
+
+                  // 백엔드가 발행한 viewUrl과 식별자(data-file-id)를 포함하여 에디터 본문에 <img> 태그 삽입
+                  editor.image.insert(
+                    viewUrl,
+                    null,
+                    {
+                      'data-file-id': res.fileId,
+                      'data-name': file.name,
+                      alt: file.name,
+                    },
+                    editor.image.get()
+                  );
+                })
+                .catch((err) => {
+                  console.error('에디터 이미지 업로드 실패:', err);
+                  setErrorMessage('이미지 업로드에 실패했습니다. 파일 형식이나 용량을 확인해 주세요.');
+                });
+
+              // ⚠️ 매우 중요: Froala 기본 데모 서버(i.froala.com)로의 자동 업로드 전송을 차단하기 위해 false 반환
+              return false;
             },
           },
         });

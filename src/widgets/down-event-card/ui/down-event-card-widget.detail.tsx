@@ -13,6 +13,7 @@ import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { Input } from '@/shared/ui/input';
 import { openImageViewerWindow } from '@/shared/lib/image-viewer-popup';
+import { handleImageErrorCapture } from '@/shared/lib/image-fallback';
 
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -86,6 +87,10 @@ export const DownEventCardDetail: React.FC<DownEventCardDetailProps> = ({
     const target = e.target as HTMLElement;
     if (target && target.tagName.toLowerCase() === 'img') {
       const img = target as HTMLImageElement;
+      // 파일 누락 Fallback 이미지는 팝업 오픈 방지
+      if (img.dataset.fallbackApplied === 'true') {
+        return;
+      }
       if (img.src) {
         openImageViewerWindow(img.src, img.alt || '현상 및 조치 상세 이미지 확대 보기');
       }
@@ -151,10 +156,11 @@ export const DownEventCardDetail: React.FC<DownEventCardDetailProps> = ({
           </span>
         </div>
       ) : mode === 'view' && detailData.detailHtml ? (
-        /* 3. HTML Raw 렌더링 (Froala fr-view 클래스 적용 및 이미지 클릭 이벤트 바인딩) */
+        /* 3. HTML Raw 렌더링 (Froala fr-view 클래스 적용 및 이미지 클릭/로드 에러 이벤트 바인딩) */
         <div
           className="fr-view p-4 rounded-lg bg-slate-50/60 dark:bg-slate-850 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 shadow-2xs overflow-hidden"
           onClick={handleHtmlContainerClick}
+          onErrorCapture={handleImageErrorCapture}
           dangerouslySetInnerHTML={{ __html: detailData.detailHtml }}
         />
       ) : mode === 'view' ? (

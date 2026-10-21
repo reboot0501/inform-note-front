@@ -14,9 +14,8 @@ export const actionPopupQueryKeys = {
 export function useActionPopupQuery(
   downEventId?: string,
   enabled: boolean = true,
-  // [화면 해상도에 따른 현상 및 조치 상세 HTML 본문 병렬 비동기 조회 체크(필요시 주석제거)]
-  // rowNumber?: number,
-  // totalRows?: number
+  _rowNumber?: number,
+  _totalRows?: number
 ) {
   return useQuery<ActionPopupResponse>({
     queryKey: actionPopupQueryKeys.detail(downEventId),

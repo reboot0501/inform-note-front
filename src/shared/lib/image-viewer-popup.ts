@@ -1,4 +1,6 @@
 // src/shared/lib/image-viewer-popup.ts
+import { IMAGE_NOT_FOUND_DATA_URI } from './image-fallback';
+
 /**
  * 이미지 정밀 확대 검사용 윈도우 팝업 오픈 헬퍼
  */
@@ -54,7 +56,11 @@ export function openImageViewerWindow(src: string, title = '현상 및 조치 �
         </head>
         <body>
           <div class="title">${title}</div>
-          <img src="${src}" alt="${title}" />
+          <img 
+            src="${src}" 
+            alt="${title}" 
+            onerror="this.onerror=null; this.src='${IMAGE_NOT_FOUND_DATA_URI}'; this.style.maxWidth='420px';"
+          />
         </body>
       </html>
     `);
